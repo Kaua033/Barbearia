@@ -1,0 +1,19 @@
+<section class="section services" id="servicos">
+  <div class="container">
+    <p class="section__label">O que oferecemos</p>
+    <h2 class="section__title">Serviços</h2>
+
+    <div class="services__grid">
+      @for (service of services; track service.id; let index = $index) {
+        <article class="service-card" [style.--delay]="index * 90">
+          <span class="service-card__index">0{{ index + 1 }}</span>
+          <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+            <path [attr.d]="iconPath(service)" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          <h3>{{ service.name }}</h3>
+          <p>{{ service.price | currency: 'BRL' : 'symbol' : '1.0-0' : 'pt-BR' }}</p>
+        </article>
+      }
+    </div>
+  </div>
+</section>

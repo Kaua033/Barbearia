@@ -1,0 +1,155 @@
+<section class="section booking" id="agendar">
+  <div class="container">
+    <p class="section__label">Reserve seu ritual</p>
+    <h2 class="section__title accent">Agendamento</h2>
+
+    <div class="booking__panel">
+      <div class="stepper" aria-label="Etapas do agendamento">
+        @for (step of steps; track step.id) {
+          <button
+            type="button"
+            class="stepper__item"
+            [class.is-active]="currentStep() === step.id"
+            [class.is-done]="currentStep() > step.id"
+            [disabled]="step.id >= currentStep()"
+            (click)="goToStep(step.id)"
+          >
+            <span>{{ step.id }}</span>
+            {{ step.label }}
+          </button>
+        }
+      </div>
+
+      <div class="booking__body">
+        @switch (currentStep()) {
+          @case (1) {
+            <div class="choice-grid choice-grid--services">
+              @for (service of services; track service.id) {
+                <button
+                  type="button"
+                  class="choice-card"
+                  [class.is-selected]="selectedService()?.id === service.id"
+                  (click)="selectService(service)"
+                >
+                  <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+                    <path [attr.d]="iconPath(service)" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                  <strong>{{ service.name }}</strong>
+                  <small>{{ service.duration }}</small>
+                  <span>{{ service.price | currency: 'BRL' : 'symbol' : '1.0-0' : 'pt-BR' }}</span>
+                </button>
+              }
+            </div>
+          }
+
+          @case (2) {
+            <div class="choice-grid choice-grid--barbers">
+              @for (barber of barbers; track barber.id) {
+                <button
+                  type="button"
+                  class="barber-card"
+                  [class.is-selected]="selectedBarber()?.id === barber.id"
+                  (click)="selectBarber(barber)"
+                >
+                  <span class="barber-card__avatar">{{ barber.initials || '*' }}</span>
+                  <strong>{{ barber.name }}</strong>
+                  <small>{{ barber.specialty }}</small>
+                </button>
+              }
+            </div>
+          }
+
+          @case (3) {
+            <div class="calendar">
+              <div class="calendar__header">
+                <button type="button" aria-label="Mês anterior" (click)="changeMonth(-1)">‹</button>
+                <strong>{{ monthLabel() }}</strong>
+                <button type="button" aria-label="Próximo mês" (click)="changeMonth(1)">›</button>
+              </div>
+
+              <div class="calendar__week">
+                @for (day of weekDays; track day) {
+                  <span>{{ day }}</span>
+                }
+              </div>
+
+              <div class="calendar__days">
+                @for (day of calendarDays(); track day.date.toISOString()) {
+                  <button
+                    type="button"
+                    [class.is-outside]="!day.inMonth"
+                    [class.is-selected]="isSelectedDate(day.date)"
+                    [disabled]="day.disabled || !day.inMonth"
+                    (click)="selectDate(day)"
+                  >
+                    {{ day.label }}
+                  </button>
+                }
+              </div>
+            </div>
+          }
+
+          @case (4) {
+            @if (!selectedDate()) {
+              <p class="booking__empty">Selecione uma data na etapa anterior.</p>
+            } @else {
+              <div class="slots">
+                @for (slot of timeSlots(); track slot.time) {
+                  <button
+                    type="button"
+                    [class.is-selected]="selectedTime() === slot.time"
+                    [disabled]="!slot.available"
+                    (click)="selectTime(slot)"
+                  >
+                    {{ slot.time }}
+                  </button>
+                }
+              </div>
+            }
+          }
+        }
+      </div>
+
+      <div class="booking__actions">
+        <button class="btn btn--secondary" type="button" [disabled]="currentStep() === 1" (click)="previousStep()">Voltar</button>
+        @if (currentStep() < 4) {
+          <button class="btn btn--primary" type="button" [disabled]="!canProceed()" (click)="nextStep()">Continuar</button>
+        }
+      </div>
+    </div>
+
+    @if (isComplete()) {
+      <aside class="summary" [class.is-confirmed]="confirmed()">
+        <h3>Resumo</h3>
+        <dl>
+          <div>
+            <dt>Serviço</dt>
+            <dd>{{ selectedService()?.name }}</dd>
+          </div>
+          <div>
+            <dt>Barbeiro</dt>
+            <dd>{{ selectedBarber()?.name }}</dd>
+          </div>
+          <div>
+            <dt>Data</dt>
+            <dd>{{ selectedDate() | date: 'fullDate' : undefined : 'pt-BR' }}</dd>
+          </div>
+          <div>
+            <dt>Horário</dt>
+            <dd>{{ selectedTime() }}</dd>
+          </div>
+          <div class="summary__total">
+            <dt>Total</dt>
+            <dd>{{ selectedService()?.price | currency: 'BRL' : 'symbol' : '1.0-0' : 'pt-BR' }}</dd>
+          </div>
+        </dl>
+
+        <button class="btn btn--primary summary__button" type="button" (click)="confirmBooking()">Confirmar agendamento</button>
+
+        @if (successVisible()) {
+          <p class="summary__success" role="status">Agendamento confirmado com sucesso.</p>
+        }
+      </aside>
+    }
+  </div>
+</section>

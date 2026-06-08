@@ -1,0 +1,80 @@
+.footer {
+  border-top: 1px solid var(--border);
+  background:
+    radial-gradient(circle at 90% 20%, rgba(201, 168, 92, 0.1), transparent 24rem),
+    var(--bg-secondary);
+}
+
+.footer__grid {
+  display: grid;
+  gap: 2rem;
+  padding: 4rem 0;
+}
+
+.footer section {
+  animation: fade-up 0.65s ease both;
+}
+
+.footer__brand {
+  display: inline-block;
+  margin-bottom: 1rem;
+  color: var(--accent);
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  transition: color var(--transition), transform var(--transition);
+}
+
+.footer__brand:hover {
+  color: var(--accent-strong);
+  transform: translateX(0.25rem);
+}
+
+.footer h2 {
+  margin: 0 0 1rem;
+  color: var(--accent);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.footer p {
+  margin: 0.35rem 0;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+.footer__social {
+  display: flex;
+  gap: 0.8rem;
+}
+
+.footer__social a {
+  display: grid;
+  width: 2.5rem;
+  height: 2.5rem;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-min);
+  color: var(--accent);
+  transition: border-color var(--transition), background var(--transition), transform var(--transition);
+}
+
+.footer__social a:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  transform: translateY(-0.25rem);
+}
+
+.footer__bottom {
+  border-top: 1px solid var(--border);
+  padding: 1.2rem 0;
+}
+
+@media (min-width: 820px) {
+  .footer__grid {
+    grid-template-columns: 1.4fr 1fr 1fr 0.8fr;
+  }
+}

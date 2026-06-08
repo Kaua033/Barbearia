@@ -1,0 +1,420 @@
+.booking {
+  background:
+    radial-gradient(circle at 12% 16%, rgba(201, 168, 92, 0.12), transparent 22rem),
+    var(--bg-secondary);
+}
+
+.booking__panel,
+.summary {
+  margin-top: 2.5rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-min);
+  background: rgba(16, 16, 15, 0.82);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(10px);
+  animation: fade-up 0.75s ease both;
+}
+
+.stepper {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  border-bottom: 1px solid var(--border);
+}
+
+.stepper__item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  min-height: 4rem;
+  padding: 1rem;
+  border: 0;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-align: left;
+  text-transform: uppercase;
+  transition: color var(--transition), background var(--transition);
+}
+
+.stepper__item::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0;
+  height: 2px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--transition);
+}
+
+.stepper__item span {
+  display: inline-grid;
+  width: 1.8rem;
+  height: 1.8rem;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  transition: border-color var(--transition), background var(--transition), color var(--transition);
+}
+
+.stepper__item.is-active,
+.stepper__item.is-done {
+  color: var(--accent);
+}
+
+.stepper__item.is-active {
+  background: rgba(201, 168, 92, 0.08);
+}
+
+.stepper__item.is-active::after,
+.stepper__item.is-done::after {
+  transform: scaleX(1);
+}
+
+.stepper__item.is-active span,
+.stepper__item.is-done span {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.booking__body {
+  min-height: 24rem;
+  padding: 1rem;
+}
+
+.choice-grid {
+  display: grid;
+  gap: 1rem;
+  animation: fade-up 0.5s ease both;
+}
+
+.choice-card,
+.barber-card {
+  position: relative;
+  display: grid;
+  justify-items: start;
+  gap: 0.7rem;
+  min-height: 10rem;
+  padding: 1.2rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-min);
+  overflow: hidden;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.04), transparent 36%),
+    transparent;
+  color: var(--text-primary);
+  text-align: left;
+  transition:
+    border-color var(--transition),
+    background var(--transition),
+    box-shadow var(--transition),
+    transform var(--transition);
+}
+
+.choice-card::before,
+.barber-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 20% 15%, rgba(201, 168, 92, 0.18), transparent 42%);
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+
+.choice-card:hover,
+.barber-card:hover,
+.choice-card.is-selected,
+.barber-card.is-selected {
+  border-color: var(--accent);
+  background: var(--bg-selected);
+  transform: translateY(-0.25rem);
+  box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.22);
+}
+
+.choice-card:hover::before,
+.barber-card:hover::before,
+.choice-card.is-selected::before,
+.barber-card.is-selected::before {
+  opacity: 1;
+}
+
+.choice-card > *,
+.barber-card > * {
+  position: relative;
+}
+
+.choice-card svg {
+  color: var(--accent);
+  transition: transform var(--transition);
+}
+
+.choice-card:hover svg,
+.choice-card.is-selected svg {
+  transform: scale(1.12) rotate(-8deg);
+}
+
+.choice-card strong,
+.barber-card strong {
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.choice-card small,
+.barber-card small {
+  color: var(--text-muted);
+}
+
+.choice-card span {
+  color: var(--accent);
+  font-weight: 800;
+}
+
+.barber-card__avatar {
+  display: grid;
+  width: 3.4rem;
+  height: 3.4rem;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  color: var(--accent);
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+  transition: border-color var(--transition), background var(--transition), transform var(--transition);
+}
+
+.barber-card:hover .barber-card__avatar,
+.barber-card.is-selected .barber-card__avatar {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  transform: scale(1.06);
+}
+
+.calendar {
+  max-width: 22rem;
+  margin-inline: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-min);
+  overflow: hidden;
+  background: var(--bg-primary);
+  box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.2);
+  animation: fade-up 0.5s ease both;
+}
+
+.calendar__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  border-bottom: 1px solid var(--border);
+  background: rgba(201, 168, 92, 0.06);
+}
+
+.calendar__header strong {
+  color: var(--text-primary);
+  font-family: var(--font-serif);
+  letter-spacing: 0;
+  text-transform: capitalize;
+}
+
+.calendar__header button {
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--accent);
+  font-size: 1.2rem;
+  transition: border-color var(--transition), background var(--transition), transform var(--transition);
+}
+
+.calendar__header button:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  transform: scale(1.08);
+}
+
+.calendar__week,
+.calendar__days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.calendar__week span {
+  padding: 0.75rem 0;
+  color: var(--text-secondary);
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.calendar__days button {
+  aspect-ratio: 1;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-primary);
+  transition: border-color var(--transition), background var(--transition), color var(--transition), transform var(--transition);
+}
+
+.calendar__days button:hover:not(:disabled) {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  transform: scale(0.92);
+}
+
+.calendar__days button:disabled,
+.calendar__days button.is-outside {
+  color: #55514a;
+}
+
+.calendar__days button.is-selected {
+  background: var(--accent);
+  color: #111111;
+  font-weight: 900;
+}
+
+.slots {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  animation: fade-up 0.5s ease both;
+}
+
+.slots button {
+  min-height: 3rem;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-min);
+  background: transparent;
+  color: var(--accent);
+  font-weight: 800;
+  transition: background var(--transition), color var(--transition), transform var(--transition), box-shadow var(--transition);
+}
+
+.slots button:hover:not(:disabled) {
+  transform: translateY(-0.2rem);
+  box-shadow: 0 0.75rem 1.5rem rgba(201, 168, 92, 0.12);
+}
+
+.slots button:disabled {
+  border-color: var(--border);
+  color: var(--text-secondary);
+  opacity: 0.35;
+}
+
+.slots button.is-selected {
+  background: var(--accent);
+  color: #111111;
+}
+
+.booking__empty {
+  color: var(--text-muted);
+}
+
+.booking__actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+.summary {
+  padding: 1.25rem;
+}
+
+.summary.is-confirmed {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px var(--accent-soft), var(--shadow);
+}
+
+.summary h3 {
+  margin: 0 0 1rem;
+  color: var(--accent);
+  font-family: var(--font-serif);
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.summary dl {
+  display: grid;
+  gap: 0.8rem;
+  margin: 0 0 1.2rem;
+}
+
+.summary dl div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.8rem;
+}
+
+.summary dt {
+  color: var(--text-secondary);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.summary dd {
+  margin: 0;
+  color: var(--text-primary);
+  text-align: right;
+}
+
+.summary__total dd {
+  color: var(--accent);
+  font-weight: 900;
+}
+
+.summary__button {
+  width: 100%;
+}
+
+.summary__success {
+  margin: 1rem 0 0;
+  color: var(--accent);
+  text-align: center;
+  animation: soft-pulse 1.6s ease infinite;
+}
+
+@media (min-width: 640px) {
+  .stepper {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .stepper__item {
+    border-bottom: 0;
+  }
+
+  .booking__body {
+    padding: 1.5rem;
+  }
+
+  .choice-grid--services {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .choice-grid--barbers,
+  .slots {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 960px) {
+  .choice-grid--services {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .choice-grid--barbers {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}

@@ -1,0 +1,26 @@
+<header class="navbar">
+  <nav class="container navbar__inner" aria-label="Navegação principal">
+    <a class="navbar__logo" routerLink="/home" (click)="closeMenu()">Atlas</a>
+
+    <button
+      class="navbar__toggle"
+      type="button"
+      aria-label="Abrir menu"
+      [attr.aria-expanded]="menuOpen()"
+      [class.is-open]="menuOpen()"
+      (click)="toggleMenu()"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <div class="navbar__links" [class.is-open]="menuOpen()">
+      <a href="#inicio" (click)="closeMenu()">Início</a>
+      <a href="#servicos" (click)="closeMenu()">Serviços</a>
+      <a href="#agendar" (click)="closeMenu()">Agendar</a>
+      <a href="#contato" (click)="closeMenu()">Contato</a>
+      <a routerLink="/login" (click)="closeMenu()">Login</a>
+    </div>
+  </nav>
+</header>
