@@ -32,4 +32,18 @@ public class AuthController {
      return ResponseEntity.status(HttpStatus.CREATED).body("usuario criado");
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<?> Login(@RequestBody ClienteDTO clienteDTO){
+        var user = clientesRepository.findByNome(clienteDTO.nome());
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("usuario ou senha invalidos");
+        }
+        boolean senhaValida = passwordEncoder.matches(clienteDTO.senha(), user.getPassword());
+        if (!senhaValida) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("usuario ou senha invalidos");
+        }
+        ClienteModel cliente = (ClienteModel) user;
+        return ResponseEntity.ok(new ClienteDTO(cliente.getId(), cliente.getNome(), cliente.getTelefone(), null));
+    }
+
 }
