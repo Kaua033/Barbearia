@@ -1,5 +1,6 @@
 import { CurrencyPipe } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
+import { ServicosService } from '../../services/servicos.service';
 import { DISPLAY_SERVICES } from '../../data/mock-booking.data';
 import { BarberService } from '../../models/booking.models';
 
@@ -9,8 +10,18 @@ import { BarberService } from '../../models/booking.models';
   templateUrl: './services-section.component.html',
   styleUrl: './services-section.component.css',
 })
-export class ServicesSectionComponent {
-  protected readonly services = DISPLAY_SERVICES;
+export class ServicesSectionComponent implements OnInit {
+  private readonly servicosService = inject(ServicosService);
+
+  protected services = DISPLAY_SERVICES;
+
+  ngOnInit(): void {
+    this.servicosService.listar().subscribe((lista) => {
+      if (lista.length > 0) {
+        this.services = lista.slice(0, 4);
+      }
+    });
+  }
 
   protected iconPath(service: BarberService): string {
     const paths = {

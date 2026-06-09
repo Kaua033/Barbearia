@@ -3,23 +3,42 @@
     <div class="login__brand">
       <p class="section__label">Área de acesso</p>
       <a class="login__logo" routerLink="/home">Atlas</a>
-      <h1>Entrar</h1>
-      <p class="login__subtitle">Acesso visual para iniciar a navegação do site.</p>
+      <h1>{{ isRegister ? 'Cadastrar' : 'Entrar' }}</h1>
+      <p class="login__subtitle">{{ isRegister ? 'Crie sua conta para agendar.' : 'Acesso visual para iniciar a navegação do site.' }}</p>
     </div>
 
-    <div class="login__form">
+    <form class="login__form" (ngSubmit)="submit()">
+      @if (isRegister) {
+        <div class="form-field">
+          <label for="nome">Nome</label>
+          <input id="nome" type="text" autocomplete="name" placeholder="Seu nome" [(ngModel)]="nome" name="nome" />
+        </div>
+      }
+
       <div class="form-field">
-        <label for="username">Usuário</label>
-        <input id="username" type="text" autocomplete="username" placeholder="Digite seu usuário" />
+        <label for="telefone">Telefone</label>
+        <input id="telefone" type="tel" autocomplete="tel" placeholder="(11) 99999-9999" [(ngModel)]="telefone" name="telefone" />
       </div>
 
       <div class="form-field">
-        <label for="password">Senha</label>
-        <input id="password" type="password" autocomplete="current-password" placeholder="Digite sua senha" />
+        <label for="senha">Senha</label>
+        <input id="senha" type="password" autocomplete="current-password" placeholder="Sua senha" [(ngModel)]="senha" name="senha" />
       </div>
 
-      <a class="btn btn--primary login__submit" routerLink="/home">Entrar</a>
-    </div>
+      @if (error) {
+        <p class="login__error">{{ error }}</p>
+      }
 
+      <button class="btn btn--primary login__submit" type="submit" [disabled]="loading">
+        {{ loading ? 'Aguarde...' : (isRegister ? 'Cadastrar' : 'Entrar') }}
+      </button>
+
+      <p class="login__hint">
+        {{ isRegister ? 'Já tem conta?' : 'Não tem conta?' }}
+        <button type="button" class="link-btn" (click)="isRegister = !isRegister; error = ''">
+          {{ isRegister ? 'Entrar' : 'Cadastre-se' }}
+        </button>
+      </p>
+    </form>
   </section>
 </main>

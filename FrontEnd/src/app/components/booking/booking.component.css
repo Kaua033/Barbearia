@@ -386,6 +386,13 @@
   animation: soft-pulse 1.6s ease infinite;
 }
 
+.summary__error {
+  margin: 1rem 0 0;
+  color: #e74c3c;
+  text-align: center;
+  font-size: 0.85rem;
+}
+
 @media (min-width: 640px) {
   .stepper {
     grid-template-columns: repeat(4, 1fr);

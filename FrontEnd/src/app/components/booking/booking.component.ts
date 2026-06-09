@@ -1,7 +1,11 @@
 import { CurrencyPipe, DatePipe } from '@angular/common';
-import { Component, computed, signal } from '@angular/core';
-import { BARBERS, SERVICES } from '../../data/mock-booking.data';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { AgendamentoService } from '../../services/agendamento.service';
+import { AuthService } from '../../services/auth.service';
+import { BarbeirosService } from '../../services/barbeiros.service';
+import { ServicosService } from '../../services/servicos.service';
 import { Barber, BarberService, TimeSlot } from '../../models/booking.models';
+import { SERVICES, BARBERS } from '../../data/mock-booking.data';
 
 type BookingStep = 1 | 2 | 3 | 4;
 
@@ -18,9 +22,14 @@ interface CalendarDay {
   templateUrl: './booking.component.html',
   styleUrl: './booking.component.css',
 })
-export class BookingComponent {
-  protected readonly services = SERVICES;
-  protected readonly barbers = BARBERS;
+export class BookingComponent implements OnInit {
+  private readonly agendamentoService = inject(AgendamentoService);
+  private readonly servicosService = inject(ServicosService);
+  private readonly barbeirosService = inject(BarbeirosService);
+  private readonly auth = inject(AuthService);
+
+  protected services: BarberService[] = SERVICES;
+  protected barbers: Barber[] = BARBERS;
   protected readonly steps: { id: BookingStep; label: string }[] = [
     { id: 1, label: 'Serviço' },
     { id: 2, label: 'Barbeiro' },
@@ -37,6 +46,7 @@ export class BookingComponent {
   protected readonly calendarMonth = signal(this.startOfMonth(new Date()));
   protected readonly confirmed = signal(false);
   protected readonly successVisible = signal(false);
+  protected readonly apiError = signal('');
 
   protected readonly monthLabel = computed(() =>
     new Intl.DateTimeFormat('pt-BR', { month: 'long', year: 'numeric' }).format(this.calendarMonth()),
@@ -100,6 +110,19 @@ export class BookingComponent {
     () => !!this.selectedService() && !!this.selectedBarber() && !!this.selectedDate() && !!this.selectedTime(),
   );
 
+  ngOnInit(): void {
+    this.servicosService.listar().subscribe((lista) => {
+      if (lista.length > 0) {
+        this.services = lista;
+      }
+    });
+    this.barbeirosService.listar().subscribe((lista) => {
+      if (lista.length > 0) {
+        this.barbers = lista;
+      }
+    });
+  }
+
   protected selectService(service: BarberService): void {
     this.selectedService.set(service);
     this.resetConfirmation();
@@ -160,9 +183,40 @@ export class BookingComponent {
       return;
     }
 
-    this.confirmed.set(true);
-    this.successVisible.set(true);
-    window.setTimeout(() => this.successVisible.set(false), 5000);
+    const user = this.auth.user();
+    if (!user?.id) {
+      this.apiError.set('Faça login antes de confirmar.');
+      return;
+    }
+
+    this.apiError.set('');
+    const service = this.selectedService()!;
+    const barber = this.selectedBarber()!;
+    const date = this.selectedDate()!;
+    const time = this.selectedTime()!;
+
+    const [hours, minutes] = time.split(':').map(Number);
+    const dataHora = new Date(date);
+    dataHora.setHours(hours, minutes, 0, 0);
+
+    this.agendamentoService
+      .criar({
+        clienteId: user.id,
+        barbeiroId: Number(barber.id),
+        servicoId: Number(service.id),
+        dataHora: dataHora.toISOString(),
+        status: 'CONFIRMADO',
+      })
+      .subscribe({
+        next: () => {
+          this.confirmed.set(true);
+          this.successVisible.set(true);
+          window.setTimeout(() => this.successVisible.set(false), 5000);
+        },
+        error: () => {
+          this.apiError.set('Erro ao confirmar agendamento. Tente novamente.');
+        },
+      });
   }
 
   protected isSelectedDate(date: Date): boolean {
@@ -185,6 +239,7 @@ export class BookingComponent {
   private resetConfirmation(): void {
     this.confirmed.set(false);
     this.successVisible.set(false);
+    this.apiError.set('');
   }
 
   private startOfMonth(date: Date): Date {

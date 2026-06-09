@@ -146,6 +146,10 @@
 
         <button class="btn btn--primary summary__button" type="button" (click)="confirmBooking()">Confirmar agendamento</button>
 
+        @if (apiError()) {
+          <p class="summary__error" role="alert">{{ apiError() }}</p>
+        }
+
         @if (successVisible()) {
           <p class="summary__success" role="status">Agendamento confirmado com sucesso.</p>
         }
