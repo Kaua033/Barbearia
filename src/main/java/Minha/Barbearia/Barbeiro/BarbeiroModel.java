@@ -6,6 +6,10 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/*
+ * Entidade JPA que representa a tabela "barbeiro".
+ * Cada barbeiro tem nome e telefone.
+ */
 @Table(name = "Barbeiro")
 @Entity
 @NoArgsConstructor
@@ -20,16 +24,13 @@ public class BarbeiroModel {
     private Long id;
 
     @Column(name = "nome")
-    private String   nome;
+    private String nome;
 
     @Column(name = "telefone")
     private String telefone;
 
-
-
-    public  Long barbeiro(){
-        return  id;
+    public Long barbeiro() {
+        return id;
     }
-
 
 }

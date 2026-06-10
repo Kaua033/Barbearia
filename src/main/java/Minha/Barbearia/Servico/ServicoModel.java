@@ -7,6 +7,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Service;
 
+/*
+ * Entidade JPA que representa a tabela "servico".
+ * Cada serviço tem um nome (ex: "Corte de cabelo") e um valor.
+ */
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,7 +18,6 @@ import org.springframework.stereotype.Service;
 @Getter
 @Table(name = "servico")
 public class ServicoModel {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -27,8 +30,8 @@ public class ServicoModel {
     @Column(name = "valor")
     private Double valor;
 
-public Long servicoid(){
-    return id;
-}
+    public Long servicoid() {
+        return id;
+    }
 
 }

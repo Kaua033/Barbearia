@@ -26,10 +26,13 @@ export class AuthService {
     return this.api.post<string>('/auth/register', dto);
   }
 
-  login(dto: ClienteDTO): void {
-    const user: AuthState = { id: dto.id ?? null, nome: dto.nome, telefone: dto.telefone };
-    this.saveUser(user);
-    this.user.set(user);
+  login(nome: string, senha: string): Observable<AuthState> {
+    return this.api.post<AuthState>('/auth/login', { nome, senha }).pipe(
+      tap(user => {
+        this.saveUser(user);
+        this.user.set(user);
+      })
+    );
   }
 
   logout(): void {

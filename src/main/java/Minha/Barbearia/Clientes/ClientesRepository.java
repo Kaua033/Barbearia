@@ -5,5 +5,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public interface ClientesRepository extends JpaRepository<ClienteModel,Long> {
 
-    UserDetails findByNome(String nome);
+    ClienteModel findByNome(String nome);
+
+    ClienteModel findByTelefone(String telefone);
 }

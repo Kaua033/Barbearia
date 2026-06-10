@@ -16,8 +16,8 @@
       }
 
       <div class="form-field">
-        <label for="telefone">Telefone</label>
-        <input id="telefone" type="tel" autocomplete="tel" placeholder="(11) 99999-9999" [(ngModel)]="telefone" name="telefone" />
+        <label for="telefone">{{ isRegister ? 'Telefone' : 'Nome ou Telefone' }}</label>
+        <input id="telefone" type="text" autocomplete="username" placeholder="{{ isRegister ? '(11) 99999-9999' : 'Seu nome ou telefone' }}" [(ngModel)]="telefone" name="telefone" />
       </div>
 
       <div class="form-field">

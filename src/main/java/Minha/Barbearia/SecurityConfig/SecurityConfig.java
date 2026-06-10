@@ -12,11 +12,28 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 
+/*
+ * Configuração de segurança do Spring Security.
+ *
+ * Como o projeto ainda está em desenvolvimento, todos os endpoints
+ * estão liberados (permitAll). Em produção, isso deve ser restrito.
+ *
+ * CSRF desabilitado (API REST stateless).
+ * Sessão stateless (sem sessão HTTP).
+ * H2 Console liberado para acesso via navegador.
+ */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-
+    /*
+     * Configura o filtro de segurança.
+     *
+     * .csrf(csrf -> csrf.disable()) → desabilita proteção CSRF
+     * .sessionManagement(STATELESS) → sem sessão HTTP (tokens JWT no futuro)
+     * .authorizeHttpRequests → define regras de autorização
+     * .headers(frameOptions.disable()) → permite iframe (H2 Console)
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 
@@ -34,14 +51,22 @@ public class SecurityConfig {
                 .build();
     }
 
-@Bean
-    public PasswordEncoder passwordEncoder(){
+    /*
+     * Bean de criptografia de senha.
+     * Usa BCrypt, algoritmo recomendado para senhas.
+     */
+    @Bean
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-}
+    }
 
-@Bean
-public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws  Exception{
+    /*
+     * Bean do AuthenticationManager.
+     * Necessário para autenticação via Spring Security.
+     */
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
-}
+    }
 
 }
