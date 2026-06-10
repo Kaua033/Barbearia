@@ -22,14 +22,26 @@ export class AuthService {
 
   constructor(private api: ApiService) {}
 
+  wakeUp(): void {
+    this.api.wakeUp();
+  }
+
   register(dto: ClienteDTO): Observable<string> {
     return this.api.post<string>('/auth/register', dto);
   }
 
-  login(dto: ClienteDTO): void {
-    const user: AuthState = { id: dto.id ?? null, nome: dto.nome, telefone: dto.telefone };
-    this.saveUser(user);
-    this.user.set(user);
+  login(nome: string, senha: string): Observable<AuthState> {
+    console.log('[AuthService] login chamado:', nome);
+    return this.api.post<AuthState>('/auth/login', { nome, senha }).pipe(
+      tap({
+        next: (user) => {
+          console.log('[AuthService] login resposta:', user);
+          this.saveUser(user);
+          this.user.set(user);
+        },
+        error: (err) => console.error('[AuthService] login erro:', err),
+      })
+    );
   }
 
   logout(): void {
