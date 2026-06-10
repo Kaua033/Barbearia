@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { TimeoutError } from 'rxjs';
@@ -10,7 +10,7 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
 
@@ -20,6 +20,13 @@ export class LoginComponent {
   isRegister = false;
   error = '';
   loading = false;
+  warming = false;
+
+  ngOnInit(): void {
+    this.warming = true;
+    this.auth.wakeUp();
+    setTimeout(() => this.warming = false, 3_000);
+  }
 
   submit(): void {
     this.error = '';
@@ -34,14 +41,15 @@ export class LoginComponent {
 
       this.auth.register({ nome: this.nome, telefone: this.telefone, senha: this.senha }).subscribe({
         next: () => {
-          this.error = '';
           this.isRegister = false;
           this.senha = '';
-          this.error = 'Conta criada com sucesso! Fa√ßa login.';
+          this.error = 'Conta criada com sucesso! Fa+∫a login.';
           this.loading = false;
         },
         error: (err) => {
-          this.error = err instanceof TimeoutError ? 'O servidor est√° demorando. Tente novamente.' : 'Erro ao cadastrar. Tente novamente.';
+          this.error = err instanceof TimeoutError
+            ? 'Servidor demorou para responder. Tente novamente.'
+            : 'Erro ao cadastrar. Tente novamente.';
           this.loading = false;
         },
       });
@@ -53,13 +61,19 @@ export class LoginComponent {
       }
 
       this.auth.login(this.telefone, this.senha).subscribe({
-        next: () => {
-          this.router.navigate(['/home'], { fragment: 'agendar' });
+        next: (user) => {
+          this.loading = false;
+          if (user?.id) {
+            this.router.navigate(['/home'], { fragment: 'agendar' });
+          } else {
+            this.error = 'Resposta inv+Ìlida do servidor.';
+          }
         },
         error: (err) => {
-          if (err instanceof TimeoutError) this.error = 'O servidor est√° demorando. Tente novamente.';
-          else if (err.status === 401) this.error = 'Credenciais inv√°lidas.';
-          else this.error = 'Erro ao conectar ao servidor.';
+          console.error('[Login] erro completo:', err);
+          if (err instanceof TimeoutError) this.error = 'Servidor demorou para responder. Tente novamente.';
+          else if (err.status === 401) this.error = 'Credenciais inv+Ìlidas.';
+          else this.error = `Erro ${err.status ?? 'rede'}: ${err.statusText || err.message || 'servidor indispon+°vel'}`;
           this.loading = false;
         },
       });

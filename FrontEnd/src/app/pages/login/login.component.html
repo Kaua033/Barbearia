@@ -25,6 +25,10 @@
         <input id="senha" type="password" autocomplete="current-password" placeholder="Sua senha" [(ngModel)]="senha" name="senha" />
       </div>
 
+      @if (warming) {
+        <p class="login__hint">Preparando servidor...</p>
+      }
+
       @if (error) {
         <p class="login__error">{{ error }}</p>
       }
