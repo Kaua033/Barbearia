@@ -1,4 +1,4 @@
-```html
+html
 <title>Atlas Barber Shop</title>
 
 <nav>
