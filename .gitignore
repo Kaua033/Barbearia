@@ -26,11 +26,14 @@ target/
 /data/
 /nbdist/
 /.nb-gradle/
+/AgentsSkills
 build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
 ### VS Code ###
 .vscode/
-AGENTE.md
+AgentsSkills/AGENTEBACK.md
+AgentsSkills/TAREFAS.md
 LEMBRETE.md
+help.md
