@@ -1,5 +1,6 @@
 package Minha.Barbearia.Barbeiro;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -57,6 +58,7 @@ public class BarbeiroService {
      * Atualiza barbeiro existente.
      * Se o ID não existir, retorna null.
      */
+
     public BarbeiroDTO AUTALIZAR(BarbeiroDTO barbeiroDTO, Long id) {
         Optional<BarbeiroModel> VERIC = barbeiroRepository.findById(id);
         if (VERIC.isPresent()) {
